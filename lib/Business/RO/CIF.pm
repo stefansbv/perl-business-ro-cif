@@ -1,13 +1,13 @@
 package Business::RO::CIF;
 
+# ABSTRACT: Romanian CIF validation
+
 use 5.010;
 use strict;
 use warnings;
 use utf8;
 use Moo;
 use Types::Standard qw(Int ArrayRef Str);
-
-our $VERSION = '0.01';
 
 has 'cif' => (
     is       => 'ro',
@@ -101,7 +101,7 @@ __END__
 
 =head1 NAME
 
-Business::RO::CIF - The great new Business::RO::CIF!
+Business::RO::CIF - Romanian CIF validation
 
 =head1 VERSION
 

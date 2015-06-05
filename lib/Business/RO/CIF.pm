@@ -2,11 +2,9 @@ package Business::RO::CIF;
 
 # ABSTRACT: Romanian CIF validation
 
-use 5.010;
-use strict;
-use warnings;
-use utf8;
 use Moo;
+use 5.010;
+use utf8;
 use Types::Standard qw(Int ArrayRef Str);
 
 has 'cif' => (
@@ -15,7 +13,7 @@ has 'cif' => (
     required => 1,
 );
 
-has 'why' => (
+has 'errstr' => (
     is       => 'rw',
     isa      => Str,
 );
@@ -59,16 +57,21 @@ sub _build_rev_cif {
 sub valid {
     my $self = shift;
 
+    if ( $self->cif =~ m{[^0-9]} ) {
+        $self->errstr('The input string contains invalid characters');
+        return 0;
+    }
+
     my @rev_cif = @{ $self->rev_cif };
     my @rev_key = @{ $self->rev_key };
 
     my $len = scalar @rev_cif;
     if ($len < 5) {
-        $self->why("too short");
+        $self->errstr('The input is too short (< 5)');
         return 0;
     }
     if ($len > 9) {
-        $self->why("too long");
+        $self->errstr('The input is too long (> 9)');
         return 0;
     }
 
@@ -80,18 +83,15 @@ sub valid {
     my $m11 = $sum * 10 % 11;
     my $ctc = $m11 == 10 ? 0 : $m11;
 
-    return $self->checksum == $ctc ? 1 : 0;
+    if ( $self->checksum == $ctc ) {
+        return 1;
+    }
+    else {
+        $self->errstr('The checksum failed');
+        return 0;
+    }
+    return
 }
-
-# sub BUILDARGS {
-#     my ( $class, @args ) = @_;
-#     if ( @args == 1 && !ref $args[0] ) {
-#         return { cif => $args[0] };
-#     }
-#     else {
-#         return { @args };
-#     }
-# }
 
 1;
 
@@ -99,47 +99,46 @@ __END__
 
 =encoding utf8
 
-=head1 NAME
-
-Business::RO::CIF - Romanian CIF validation
-
-=head1 VERSION
-
-Version 0.01
-
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
+use Business::RO::CIF;
 
-Perhaps a little code snippet.
+my $cif = Business::RO::CIF->new( cif => '123456789' );
 
-    use Business::RO::CIF;
-
-    my $foo = Business::RO::CIF->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+say $cif->errstr unless $cif->valid;
 
 =head1 ATTRIBUTES
 
-=head2 cif
+=head2 C<cif>
 
-=head2 rev_key
+The C<cif> attribute holds the input CIF string.  It should contain
+only Arabic numerals (0-9).
 
-=head2 rev_cif
+=head2 C<errstr>
 
-=head2 checksum
+The C<errstr> attribute holds a message string that describes what
+part of the validation algorithm failed.
+
+=head2 C<rev_key>
+
+The C<rev_key> attribute is a array reference of the validation
+string, in reverse order.
+
+=head2 C<rev_cif>
+
+The C<rev_cif> attribute is a array reference of the input string,
+without the checksum digit, in reverse order.
+
+=head2 C<checksum>
+
+The C<checksum> attribute holds the last character (digit) of the
+input string.
 
 =head1 METHODS
 
-=head2 BUILDARGS
+=head2 C<valid>
 
-=head1 AUTHOR
-
-Stefan Suciu, C<< <stefan at s2i2.ro> >>
+The C<valid> method implements the validation algorithm for the Romanian CIF.
 
 =head1 BUGS
 
@@ -157,17 +156,9 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Business-RO-CIF>
-
 =item * AnnoCPAN: Annotated CPAN documentation
 
 L<http://annocpan.org/dist/Business-RO-CIF>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Business-RO-CIF>
 
 =item * Search CPAN
 
@@ -177,22 +168,13 @@ L<http://search.cpan.org/dist/Business-RO-CIF/>
 
 =head1 ACKNOWLEDGEMENTS
 
-Proiect creat în colaborare și din inițiativa lui Árpád Szász.
+This project was created with the initiative and suggestion made by
+Árpád Szász.
 
-The module is inspired from the Business::RO::CNP module by Octavian Râșniță (TEDDY)
+The module is inspired from the Business::RO::CNP module by Octavian
+Râșniță (TEDDY)
 
-The validation algoritm is from L<http://ro.wikipedia.org/wiki/Cod_de_Identificare_Fiscal%C4%83>.
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2015 Árpád Szász
-
-Copyright 2015 Stefan Suciu.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See L<http://dev.perl.org/licenses/> for more information.
+The validation algorithm is from
+L<http://ro.wikipedia.org/wiki/Cod_de_Identificare_Fiscal%C4%83>.
 
 =cut

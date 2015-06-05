@@ -16,6 +16,7 @@ has 'cif' => (
 has 'errstr' => (
     is       => 'rw',
     isa      => Str,
+    default  => sub {''},
 );
 
 has 'rev_key' => (
@@ -93,6 +94,19 @@ sub valid {
     return
 }
 
+sub BUILDARGS {
+    my ( $class, @args ) = @_;
+    if ( @args == 1 && !ref $args[0] ) {
+        $args[0] =~ s{^RO\s*}{}i;
+        return { cif => $args[0] };
+    }
+    else {
+        my %para = @args;
+        $para{cif} =~ s{^RO\s*}{}i;
+        return \%para;
+    }
+}
+
 1;
 
 __END__
@@ -103,9 +117,18 @@ __END__
 
 use Business::RO::CIF;
 
-my $cif = Business::RO::CIF->new( cif => '123456789' );
+my $cif = Business::RO::CIF->new( cif => 123456789 );
+
+or
+
+my $cif = Business::RO::CIF->new( 'RO 123456789' );
 
 say $cif->errstr unless $cif->valid;
+
+=head1 BUILDARGS
+
+Override C<BUILDARGS> to allow a single value parameter and remove the
+country code (RO) if present.
 
 =head1 ATTRIBUTES
 

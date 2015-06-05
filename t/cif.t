@@ -23,4 +23,34 @@ ok $cif = Business::RO::CIF->new( cif => $text ), 'new non valid CIF';
 is $cif->valid, 0, 'valid';
 like $cif->errstr, qr/checksum/, 'error string';
 
+$text = 1234567890;
+ok $cif = Business::RO::CIF->new( cif => $text ), 'new non valid CIF (number)';
+is $cif->valid, 0, 'valid';
+like $cif->errstr, qr/checksum/, 'error string';
+
+$text = '8915831';
+ok $cif = Business::RO::CIF->new( cif => $text ), 'new valid CIF';
+is $cif->valid, 1, 'valid';
+is $cif->errstr, '', 'error string';
+
+$text = 8915831;
+ok $cif = Business::RO::CIF->new( cif => $text ), 'new valid CIF (number)';
+is $cif->valid, 1, 'valid';
+is $cif->errstr, '', 'error string';
+
+$text = 'RO8915831';
+ok $cif = Business::RO::CIF->new( cif => $text ), 'new valid CIF';
+is $cif->valid, 1, 'valid';
+is $cif->errstr, '', 'error string';
+
+$text = 'RO  8915831';
+ok $cif = Business::RO::CIF->new( cif => $text ), 'new valid CIF';
+is $cif->valid, 1, 'valid';
+is $cif->errstr, '', 'error string';
+
+$text = 'RO  8915831';
+ok $cif = Business::RO::CIF->new($text), 'new valid CIF param as value';
+is $cif->valid, 1, 'valid';
+is $cif->errstr, '', 'error string';
+
 done_testing;

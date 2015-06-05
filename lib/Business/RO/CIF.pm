@@ -158,10 +158,12 @@ input string.
 
 The C<valid> method implements the validation algorithm for the Romanian CIF.
 
+Returns 1 if the CIF is valid and 0 otherwise.
+
 =head2 BUILDARGS
 
-Override C<BUILDARGS> to allow a single value parameter and remove the
-country code (RO) if present.
+Override C<BUILDARGS> to also allow a single value parameter and
+remove the country code (RO) if present.
 
 =head1 BUGS
 
@@ -189,13 +191,23 @@ L<http://search.cpan.org/dist/Business-RO-CIF/>
 
 =back
 
+=head1 SEE ALSO
+
+Other module(s) in the same namespace:
+
+=over
+
+=item L<Business::RO::CNP>
+
+=back
+
 =head1 ACKNOWLEDGEMENTS
 
-This project was created with the initiative and suggestion made by
-Árpád Szász.
+This project was created with at the initiative and the suggestion
+made by Árpád Szász.
 
 The module is inspired from the Business::RO::CNP module by Octavian
-Râșniță (TEDDY)
+Râșniță (TEDDY).
 
 The validation algorithm is from
 L<http://ro.wikipedia.org/wiki/Cod_de_Identificare_Fiscal%C4%83>.

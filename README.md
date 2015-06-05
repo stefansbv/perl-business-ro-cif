@@ -5,5 +5,4 @@ Business-RO-CIF
 
 Version: 0.002
 
-A simple module for Romanian CIF validation.
-
+A module for Romanian CIF (Tax Identification Code) validation.

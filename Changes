@@ -1,4 +1,7 @@
 Revision history for Business-RO-CIF
 
-0.03    2015-06-05
+0.004   2015-06-05
+        Add a DESCRIPTION section to the POD.
+
+0.003   2015-06-05
         First version, released on an unsuspecting world.

@@ -113,6 +113,11 @@ __END__
 
 =encoding utf8
 
+=head1 DESCRIPTION
+
+Romanian CIF (ro: Cod de Identificare Fiscală; en: Tax Identification
+Code) validation.
+
 =head1 SYNOPSIS
 
 use Business::RO::CIF;

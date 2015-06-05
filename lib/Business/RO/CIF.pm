@@ -125,11 +125,6 @@ my $cif = Business::RO::CIF->new( 'RO 123456789' );
 
 say $cif->errstr unless $cif->valid;
 
-=head1 BUILDARGS
-
-Override C<BUILDARGS> to allow a single value parameter and remove the
-country code (RO) if present.
-
 =head1 ATTRIBUTES
 
 =head2 C<cif>
@@ -162,6 +157,11 @@ input string.
 =head2 C<valid>
 
 The C<valid> method implements the validation algorithm for the Romanian CIF.
+
+=head2 BUILDARGS
+
+Override C<BUILDARGS> to allow a single value parameter and remove the
+country code (RO) if present.
 
 =head1 BUGS
 

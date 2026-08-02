@@ -186,10 +186,6 @@ You can also look for information at:
 
 =over 4
 
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Business-RO-CIF>
-
 =item * Search CPAN
 
 L<http://search.cpan.org/dist/Business-RO-CIF/>
